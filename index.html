@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepDetect - Deepfake Detection Tool</title>
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #f39c12;
+            --background-color: #f4f4f4;
+            --text-color: #333;
+            --card-background: #fff;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background: linear-gradient(to bottom, #f4f4f4, #e0e0e0);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background-color: var(--card-background);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 1rem 0;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+        }
+
+        nav ul li {
+            margin-left: 20px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: var(--text-color);
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: var(--primary-color);
+        }
+
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #3a7bc8;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .feature-card {
+            background-color: var(--card-background);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .feature-card h3 {
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+
+        .upload-section {
+            background-color: var(--card-background);
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 4rem;
+        }
+
+        .file-input-wrapper {
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+        }
+
+        .file-input-wrapper:hover {
+            border-color: var(--primary-color);
+        }
+
+        .file-input-wrapper input[type="file"] {
+            display: none;
+        }
+
+        #file-name {
+            margin-top: 1rem;
+            font-style: italic;
+        }
+
+        #analysis-result {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .about-section {
+            background-color: var(--card-background);
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 4rem;
+        }
+
+        footer {
+            background-color: var(--card-background);
+            color: var(--text-color);
+            text-align: center;
+            padding: 1rem 0;
+            box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
+        }
+
+      .hamburger {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--card-background);
+            z-index: 1000;
+            padding: 2rem;
+        }
+
+        .mobile-menu.active {
+            display: block;
+        }
+
+        .mobile-menu ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .mobile-menu ul li {
+            margin-bottom: 1rem;
+        }
+
+        .mobile-menu ul li a {
+            font-size: 1.2rem;
+            color: var(--text-color);
+            text-decoration: none;
+        }
+
+        .close-menu {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+
+        .login-btn {
+            margin-left: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .hamburger {
+                display: block;
+            }
+
+            nav ul, .login-btn {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo">DeepDetect</div>
+            <ul>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#upload">Upload</a></li>
+                <li><a href="#about">About</a></li>
+            </ul>
+            <button class="hamburger" aria-label="Toggle menu">☰</button>
+            <a href="#" class="btn login-btn">Login</a>
+        </nav>
+    </header>
+
+    <div class="mobile-menu">
+        <button class="close-menu" aria-label="Close menu">×</button>
+        <ul>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#upload">Upload</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#" class="login-link">Login</a></li>
+        </ul>
+    </div>
+
+    <main class="container">
+        <section class="hero">
+            <h1>Deepfake Detection Tool</h1>
+            <p>Uncover the truth behind videos with our advanced AI technology</p>
+            <a href="#upload" class="btn">Try Now</a>
+        </section>
+
+        <section id="features">
+            <h2>Features</h2>
+            <div class="features">
+                <div class="feature-card">
+                    <h3>Real-time Analysis</h3>
+                    <p>Get instant results with our cutting-edge algorithms.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>User-friendly Interface</h3>
+                    <p>Easy to use for both tech-savvy users and beginners.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Detailed Reports</h3>
+                    <p>Receive comprehensive analysis of the video content.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="upload" class="upload-section">
+            <h2>Upload a Video</h2>
+            <p>Supported formats: MP4, AVI, MOV (MAX. 800MB)</p>
+            <form id="upload-form">
+                <div class="file-input-wrapper">
+                    <label for="file-upload">
+                        Click to upload or drag and drop your video file here
+                    </label>
+                    <input type="file" id="file-upload" accept="video/*" required>
+                </div>
+                <p id="file-name"></p>
+                <button type="submit" class="btn">Analyze</button>
+            </form>
+            <div id="analysis-result"></div>
+        </section>
+
+        <section id="about" class="about-section">
+            <h2>About Us</h2>
+            <p>We are dedicated to promoting digital literacy and safety in a world increasingly influenced by deepfake technology. Our team of experts is committed to developing cutting-edge tools to help users identify manipulated media and protect themselves from misinformation.</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2024 DeepDetect. All rights reserved.</p>
+    </footer>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('upload-form');
+        const fileInput = document.getElementById('file-upload');
+        const fileName = document.getElementById('file-name');
+        const analysisResult = document.getElementById('analysis-result');
+        const hamburger = document.querySelector('.hamburger');
+        const mobileMenu = document.querySelector('.mobile-menu');
+        const closeMenu = document.querySelector('.close-menu');
+        const loginBtn = document.querySelector('.login-btn');
+        const loginLink = document.querySelector('.login-link');
+
+        fileInput.addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                fileName.textContent = `Selected file: ${e.target.files[0].name}`;
+            } else {
+                fileName.textContent = '';
+            }
+        });
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (fileInput.files.length > 0) {
+                analysisResult.style.display = 'block';
+                analysisResult.textContent = 'Analyzing...';
+                analysisResult.style.backgroundColor = '#f0f0f0';
+
+                setTimeout(() => {
+                    const isReal = Math.random() > 0.5;
+                    if (isReal) {
+                        analysisResult.textContent = 'This video appears to be authentic.';
+                        analysisResult.style.backgroundColor = '#e6ffe6';
+                    } else {
+                        analysisResult.textContent = 'This video may be a deepfake.';
+                        analysisResult.style.backgroundColor = '#ffe6e6';
+                    }
+                }, 3000);
+            }
+        });
+
+        hamburger.addEventListener('click', function() {
+            mobileMenu.classList.add('active');
+        });
+
+        closeMenu.addEventListener('click', function() {
+            mobileMenu.classList.remove('active');
+        });
+
+        function redirectToLogin(e) {
+            e.preventDefault();
+            window.location.href = '/login.html';
+        }
+
+        if (loginBtn) loginBtn.addEventListener('click', redirectToLogin);
+        if (loginLink) loginLink.addEventListener('click', redirectToLogin);
+        document.addEventListener('click', function(e) {
+            if (mobileMenu.classList.contains('active') && !mobileMenu.contains(e.target) && e.target !== hamburger) {
+                mobileMenu.classList.remove('active');
+            }
+        });
+
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768 && mobileMenu.classList.contains('active')) {
+                mobileMenu.classList.remove('active');
+            }
+        });
+    });
+  </script>
+ </body>
+</html>
