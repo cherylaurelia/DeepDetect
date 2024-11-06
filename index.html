@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DeepDetect - Deepfake Detection Tool</title>
+    <title>DeepDetect - Deepfake Photo Detection Tool</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -11,49 +11,38 @@
         <nav class="container">
             <div class="logo">DeepDetect</div>
             <ul>
-                <li><a href="#features">Features</a></li>
                 <li><a href="#upload">Upload</a></li>
                 <li><a href="#about">About</a></li>
-                <li><a href="login.html">Login</a></li>
-                <li><a href="signup.html">Sign Up</a></li>
             </ul>
+            <button class="hamburger" aria-label="Toggle menu">☰</button>
+            <a href="#" class="btn login-btn">Login</a>
         </nav>
     </header>
 
+    <div class="mobile-menu">
+        <button class="close-menu" aria-label="Close menu">×</button>
+        <ul>
+            <li><a href="#upload">Upload</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#" class="login-link">Login</a></li>
+        </ul>
+    </div>
+
     <main class="container">
         <section class="hero">
-            <h1>Deepfake Detection Tool</h1>
-            <p>Uncover the truth behind videos with our advanced AI technology</p>
-            <a href="#upload" class="btn">Try Now</a>
+            <h1>Deepfake Photo Detection Tool</h1>
+            <p>Uncover the truth behind images with our advanced AI technology</p>
         </section>
 
-        <section id="features">
-            <h2>Features</h2>
-            <div class="features">
-                <div class="feature-card">
-                    <h3>Real-time Analysis</h3>
-                    <p>Get instant results with our cutting-edge algorithms.</p>
-                </div>
-                <div class="feature-card">
-                    <h3>User-friendly Interface</h3>
-                    <p>Easy to use for both tech-savvy users and beginners.</p>
-                </div>
-                <div class="feature-card">
-                    <h3>Detailed Reports</h3>
-                    <p>Receive comprehensive analysis of the video content.</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="upload">
-            <h2>Upload a Video</h2>
-            <p>Supported formats: MP4, AVI, MOV (MAX. 800MB)</p>
+        <section id="upload" class="upload-section">
+            <h2>Upload a Photo</h2>
+            <p>Supported formats: JPG, PNG (MAX. 10MB)</p>
             <form id="upload-form">
                 <div class="file-input-wrapper">
                     <label for="file-upload">
-                        Click to upload or drag and drop your video file here
+                        Click to upload or drag and drop your photo here
                     </label>
-                    <input type="file" id="file-upload" accept="video/*" required>
+                    <input type="file" id="file-upload" accept="image/*" required>
                 </div>
                 <p id="file-name"></p>
                 <button type="submit" class="btn">Analyze</button>
@@ -61,9 +50,9 @@
             <div id="analysis-result"></div>
         </section>
 
-        <section id="about">
+        <section id="about" class="about-section">
             <h2>About Us</h2>
-            <p>We are dedicated to promoting digital literacy and safety in a world increasingly influenced by deepfake technology. Our team of experts is committed to developing cutting-edge tools to help users identify manipulated media and protect themselves from misinformation.</p>
+            <p>We are dedicated to promoting digital literacy and safety in a world increasingly influenced by deepfake technology. Our team of experts is committed to developing cutting-edge tools to help users identify manipulated images and protect themselves from misinformation.</p>
         </section>
     </main>
 
