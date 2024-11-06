@@ -14,6 +14,8 @@
                 <li><a href="#features">Features</a></li>
                 <li><a href="#upload">Upload</a></li>
                 <li><a href="#about">About</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="signup.html">Sign Up</a></li>
             </ul>
         </nav>
     </header>
@@ -43,22 +45,32 @@
             </div>
         </section>
 
-        <section id="upload" class="upload-section">
+        <section id="upload">
             <h2>Upload a Video</h2>
             <p>Supported formats: MP4, AVI, MOV (MAX. 800MB)</p>
-            <div id="upload-form-container"></div>
+            <form id="upload-form">
+                <div class="file-input-wrapper">
+                    <label for="file-upload">
+                        Click to upload or drag and drop your video file here
+                    </label>
+                    <input type="file" id="file-upload" accept="video/*" required>
+                </div>
+                <p id="file-name"></p>
+                <button type="submit" class="btn">Analyze</button>
+            </form>
+            <div id="analysis-result"></div>
         </section>
 
-        <section id="about" class="about-section">
+        <section id="about">
             <h2>About Us</h2>
             <p>We are dedicated to promoting digital literacy and safety in a world increasingly influenced by deepfake technology. Our team of experts is committed to developing cutting-edge tools to help users identify manipulated media and protect themselves from misinformation.</p>
         </section>
     </main>
 
     <footer>
-        <p>&copy; 2024 DeepDetect. All rights reserved.</p>
+        <p>© 2024 DeepDetect. All rights reserved.</p>
     </footer>
 
-    <script src="bundle.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
