@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepDetect</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo">DeepDetect</div>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="#about">About</a></li>
+            </ul>
+            <button class="hamburger" aria-label="Toggle menu">☰</button>
+            <a href="/logout" class="btn login-btn">Logout</a>
+        </nav>
+    </header>
+
+    <div class="mobile-menu">
+        <button class="close-menu" aria-label="Close menu">×</button>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="/logout" class="login-link">Logout</a></li>
+        </ul>
+    </div>
+
+    <main class="container">
+        <section class="upload-dashboard">
+            <h1>Your Upload Dashboard</h1>
+            <div class="upload-stats">
+                <p>Uploads remaining: <span id="uploads-remaining">{{ 5 - user_uploads }}</span>/5</p>
+            </div>
+
+            <div class="upload-history">
+                <h2>Your Uploads</h2>
+                {% if photos %}
+                    <div class="photo-grid">
+                        {% for photo in photos %}
+                        <div class="photo-item">
+                            <img src="{{ url_for('static', filename='uploads/' + photo.filename) }}" alt="Uploaded photo">
+                            <div class="photo-details">
+                                <p>Uploaded: {{ photo.timestamp.strftime('%Y-%m-%d') }}</p>
+                                <p>Result: {{ photo.analysis_result }}</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p>No uploads yet.</p>
+                {% endif %}
+            </div>
+
+            {% if user_uploads < 5 %}
+            <section class="upload-section">
+                <h2>Upload a New Photo</h2>
+                <p>Supported formats: JPG, PNG (MAX. 10MB)</p>
+                <form id="upload-form" action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
+                    <div class="file-input-wrapper">
+                        <label for="file-upload">
+                            Click to upload or drag and drop your photo here
+                        </label>
+                        <input type="file" id="file-upload" name="photo" accept="image/*" required>
+                    </div>
+                    <p id="file-name"></p>
+                    <button type="submit" class="btn">Analyze</button>
+                </form>
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            </section>
+            {% else %}
+            <div class="upgrade-prompt">
+                <p>You've reached the maximum number of uploads for a free account.</p>
+                <a href="/upgrade" class="btn">Upgrade to Premium</a>
+            </div>
+            {% endif %}
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2024 DeepDetect. All rights reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
