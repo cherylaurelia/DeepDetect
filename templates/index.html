@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DeepDetect - Deepfake Photo Detection Tool</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <header>
@@ -49,22 +49,22 @@
         <section id="upload" class="upload-section">
             <h2>Upload a Photo</h2>
             <p>Supported formats: JPG, PNG (MAX. 10MB)</p>
-            <form id="upload-form">
+            <form id="upload-form" action="{{ url_for('detect_deepfake') }}" method="POST" enctype="multipart/form-data">
                 <div class="file-input-wrapper">
                     <label for="file-upload">
                         Click to upload or drag and drop your photo here
                     </label>
-                    <input type="file" id="file-upload" accept="image/*" required>
+                    <input type="file" id="file-upload" name="image" accept="image/*" required>
                 </div>
                 <p id="file-name"></p>
                 <button type="submit" class="btn">Analyze</button>
             </form>
-            <div id="analysis-result"></div>
+            <div id="analysis-result" class="result-container"></div>
         </section>
 
         <section id="about" class="about-section">
             <h2>About Us</h2>
-            <p>We are dedicated to promoting digital literacy and safety in a world increasingly influenced by deepfake technology. Our team of experts is committed to developing cutting-edge tools to help users identify manipulated images and protect themselves from misinformation.</p>
+            <p>We are dedicated to promoting digital literacy and safety in a world increasingly influenced by deepfake technology. We are committed to developing cutting-edge tools to help users identify manipulated images and protect themselves from misinformation.</p>
         </section>
     </main>
 
@@ -72,6 +72,6 @@
         <p>© 2024 DeepDetect. All rights reserved.</p>
     </footer>
 
-    <script src="script.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
