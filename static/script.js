@@ -16,53 +16,110 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        uploadForm.addEventListener('submit', function(e) {
+        uploadForm.addEventListener('submit', async function(e) {
             e.preventDefault();
-            if (fileInput.files.length > 0) {
-                analysisResult.style.display = 'block';
-                analysisResult.textContent = 'Analyzing...';
-                analysisResult.style.backgroundColor = '#f0f0f0';
+            
+            if (!fileInput.files.length) {
+                return;
+            }
 
-                // analysis
-                setTimeout(() => {
-                    const isReal = Math.random() > 0.5;
-                    if (isReal) {
-                        analysisResult.textContent = 'This video appears to be authentic.';
-                        analysisResult.style.backgroundColor = '#e6ffe6';
-                    } else {
-                        analysisResult.textContent = 'This video may be a deepfake.';
+            const file = fileInput.files[0];
+            
+            if (file.size > 10 * 1024 * 1024) {
+                alert('File size exceeds 10MB limit');
+                return;
+            }
+
+            analysisResult.style.display = 'block';
+            analysisResult.textContent = 'Analyzing...';
+            analysisResult.style.backgroundColor = '#f0f0f0';
+
+            const formData = new FormData();
+            formData.append('image', file);
+
+            try {
+                const response = await fetch('/detect', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.error) {
+                    analysisResult.textContent = `Error: ${data.error}`;
+                    analysisResult.style.backgroundColor = '#ffe6e6';
+                } else {
+                    const probability = (data.fake_probability * 100).toFixed(2);
+                    if (probability > 50) {
+                        analysisResult.textContent = `This image is likely a deepfake (${probability}% probability)`;
                         analysisResult.style.backgroundColor = '#ffe6e6';
+                    } else {
+                        analysisResult.textContent = `This image appears to be authentic (${probability}% fake probability)`;
+                        analysisResult.style.backgroundColor = '#e6ffe6';
                     }
-                }, 3000);
+                }
+            } catch (error) {
+                analysisResult.textContent = `Error: ${error.message}`;
+                analysisResult.style.backgroundColor = '#ffe6e6';
             }
         });
     }
 
     if (loginForm) {
-        loginForm.addEventListener('submit', function(e) {
+        loginForm.addEventListener('submit', async function(e) {
             e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-
-            setTimeout(() => {
-                alert(`Login attempt with email: ${email}`);
-                // send this data to a server for authentication
-            }, 1000);
+            try {
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams(new FormData(loginForm))
+                });
+                if (response.redirected) {
+                    window.location.href = response.url;
+                }
+            } catch (error) {
+                console.error('Login failed:', error);
+            }
         });
     }
 
     if (signupForm) {
-        signupForm.addEventListener('submit', function(e) {
+        signupForm.addEventListener('submit', async function(e) {
             e.preventDefault();
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+            try {
+                const response = await fetch('/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams(new FormData(signupForm))
+                });
+                if (response.redirected) {
+                    window.location.href = response.url;
+                }
+            } catch (error) {
+                console.error('Signup failed:', error);
+            }
+        });
+    }
 
-            //  signup
+    const hamburger = document.querySelector('.hamburger');
+    const mobileMenu = document.querySelector('.mobile-menu');
+    const closeMenu = document.querySelector('.close-menu');
+
+    if (hamburger && mobileMenu && closeMenu) {
+        hamburger.addEventListener('click', () => {
+            mobileMenu.classList.add('active');
+            mobileMenu.style.display = 'block';
+        });
+
+        closeMenu.addEventListener('click', () => {
+            mobileMenu.classList.remove('active');
             setTimeout(() => {
-                alert(`Signup attempt with name: ${name} and email: ${email}`);
-                // send this data to a server to create a new account
-            }, 1000);
+                mobileMenu.style.display = 'none';
+            }, 300);
         });
     }
 });
